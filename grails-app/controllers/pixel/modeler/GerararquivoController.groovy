@@ -12,8 +12,6 @@ import groovy.sql.Sql;
 @Transactional(readOnly = true)
 class GerararquivoController {
 
-	def sql = Sql.newInstance("jdbc:postgresql://localhost:5432/robo","postgres", "root", "org.postgresql.Driver")
-
     static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
@@ -28,6 +26,7 @@ class GerararquivoController {
     def create() {
 	    
 		 try { 
+		          def sql = Sql.newInstance("jdbc:postgresql://localhost:5432/robo","postgres", "root", "org.postgresql.Driver")
                   def selectBase = "select count(*) as cont from pg_database where datistemplate = 'f'".toString()
 			      sql.rows(selectBase)
 				  def selectBaseOrigem = "select count(*) as cont from base".toString()
@@ -137,27 +136,47 @@ class GerararquivoController {
 	
 	def selecionartabelas (Gerararquivo gerararquivo) {
 	
-		def tabelas=[];def cont=0;def selectCampos=""; def dataBase="";
+		def cliente="";def tabelas=[];def cont=0;def selectCampos=""; def dataBase="";
 		
-		println "-------------------------------- Ruido Fora -------------------------------------"
-		 
+		//if()
+		
+		//println "--------------------------------- Morre -----------------------"+params.nometabela
+		
+		if(params.nometabela != null && params.nometabela.size() > 1){
+		
+		
+			def list = []
+			list.add(params.nometabela.toString().replace("[","['").replace("]","']").replace(" ","").replace(",","','"))	
+            if(list.size() == 1){			
+				println "---------- Singular ------"+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")
+			}else{
+			    println "------------------------- Plural ------------------"+list.size() //params.nometabela.toString().replace("[","['").replace("]","']").replace(" ","").replace(",","','")
+			}	
+
+		
+		     //def sss = params.nometabela.size()
+			 
+			 //println "--------------- Arbusto -----------"+sss
+		   
+			 //cliente = params.nometabela
+			 //println "------------------------- Salvo ------------------"+params.nometabela.toString().replace("[","['").replace("]","']").replace(" ","").replace(",","','")
+			
+		
+        }
+		
 		try {
 		
-			println "-------------------------------- Try 1 -------------------------------------"+gerararquivo.base.nome
-		
 			def conexao = Sql.newInstance("jdbc:postgresql://localhost:5432/$gerararquivo.base.nome","postgres", "root", "org.postgresql.Driver")
-			//def conexao = new Sql("jdbc:postgresql://localhost:5432/$gerararquivo.base.nome","postgres", "root", "org.postgresql.Driver")
 			def selectBaseOrigem = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
 			tabelas = conexao.rows(selectBaseOrigem).table_name
 			def gerarClasse=""
-			def lista=[]
-			lista = params.nometabela
-			dataBase = gerararquivo.base.nome			
+			dataBase = gerararquivo.base.nome	
+
+
+			println "-------------------------------- Valor Size *** ----------------------------"+params.gerararquivo
 			
 			
 			if(params.nometabela.size() > 1){
-			
-			println "-------------------------------- Valor 2 ----------------------------"+${gerararquivo.base.nome}
 				
 				params.nometabela.each{
 				    def dd=0;def campos=""; 
@@ -165,13 +184,12 @@ class GerararquivoController {
 					selectCampos = "SELECT data_type,column_name FROM information_schema.columns WHERE table_name in ('${params.nometabela[cont]}')".toString()
 					gerarClasse=conexao.rows(selectCampos)
 					
-					    //Seleciona - maior que uma opção 
+					    //Seleciona - maior que uma opção
 						//Verifica as tabelas selecionadas e faz a transpilação da mesma.Mais de uma opção selecionada.
 						//Obs: Para este caso, mais de uma tabela selecionada.
 						//Autor: @PauloCastro 
 						if(gerarClasse){
 					
-						
 						   gerarClasse.each{
 						  
 						        gerarClasse
