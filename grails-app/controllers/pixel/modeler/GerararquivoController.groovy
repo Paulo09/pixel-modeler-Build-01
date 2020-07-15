@@ -23,30 +23,7 @@ class GerararquivoController {
         respond gerararquivo
     }
 
-    def create() {
-	    
-		 try { 
-		          def sql = Sql.newInstance("jdbc:postgresql://localhost:5432/robo","postgres", "root", "org.postgresql.Driver")
-                  def selectBase = "select count(*) as cont from pg_database where datistemplate = 'f'".toString()
-			      sql.rows(selectBase)
-				  def selectBaseOrigem = "select count(*) as cont from base".toString()
-				  sql.rows(selectBaseOrigem)
-				  
-				  println "------------------- Create -------------:"+sql.rows(selectBaseOrigem).toString().replace('[{cont=','').replace('}]','')
-				  
-				  if(sql.rows(selectBaseOrigem).toString().replace('[{cont=','').replace('}]','') != sql.rows(selectBase).toString().replace('[{cont=','').replace('}]','')){	
-					println "-------------- Insert ------------------"
-				    //def criar = "INSERT INTO base (select NEXTVAL('id'),0,datcollate,datname from pg_database where datistemplate = 'f')".toString()
-			        //sql.rows(criar)
-				  }else{
-				   println "------1-------"+sql.rows(selectBaseOrigem).toString().replace('[{cont=','').replace('}]','')
-				   println "------2-------"+sql.rows(selectBase).toString().replace('[{cont=','').replace('}]','')
-				 }	
-
-			}catch (Exception e){}
-		
-		
-				  
+    def create() {				  
         respond new Gerararquivo(params)
     }
 
@@ -136,38 +113,66 @@ class GerararquivoController {
 	
 	def selecionartabelas (Gerararquivo gerararquivo) {
 	
-		def list = [];def cliente="";def tabelas=[];def cont=0;def selectCampos=""; def dataBase="";def bases="";def urlLista="";
+		def lista2=[];def list = [];def cliente="";def tabelas=[];def cont=0;def selectCampos=""; def dataBase="";def bases="";def urlLista="";
 		
 		if(params.nometabela != null && params.nometabela.size() > 1){		
 			
 			list.add(params.nometabela.toString().replace("[","['").replace("]","']").replace(" ","").replace(",","','"))
 			
-			//
-			//Criar file:
-			File file = new File("C:\\walter\\paulo.groovy");					
-			def criarapp = new FileWriter(new File("C:\\walter\\paulo.groovy"));	
-			criarapp.write("grails.plugin.reveng.includeTables = "+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")+"\n");
-			criarapp.write("grails.plugin.reveng.destDir = 'diretorioAplicacao/chico/grails-app/domain'");	
-			criarapp.close();
 			
-			//
-			//Criar Controller - dinamicamente
-			def contControler=0
-			params.nometabela.each{
-				urlLista += '   "/'+params.nometabela[contControler]+'"'+"(resources:"+" '"+params.nometabela[contControler]+"')"+"\n"
+			println "------------------- Novo App -----------------"+list			
+			  
+			
+			if(params.nometabela.toString().contains(']')){
+			    //
+				//Criar file:
+				File file = new File("C:\\walter\\paulo.groovy");					
+				def criarapp = new FileWriter(new File("C:\\walter\\paulo.groovy"));	
+				criarapp.write("grails.plugin.reveng.includeTables = "+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")+"\n");
+				criarapp.write("grails.plugin.reveng.destDir = 'diretorioAplicacao/chico/grails-app/domain'");	
+				criarapp.close();
 				
-				File file2 = new File("C:\\walter\\controller${params.nometabela[contControler]}.groovy");					
-				def criarConrtoller = new FileWriter(new File("C:\\walter\\controller${params.nometabela[contControler]}.groovy"));	
-				criarConrtoller.write("package rest.api.docs\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${params.nometabela[contControler]}', description = '${params.nometabela[contControler]} Management  API')\nclass ${params.nometabela[contControler]}Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\nUserController(){\nsuper(User)\n}}");	
-				criarConrtoller.close();
-				contControler++
-			}
+				//
+				//Criar Controller - dinamicamente
+				def contControler=0
+				params.nometabela.each{
+					urlLista += '   "/'+params.nometabela[contControler]+'"'+"(resources:"+" '"+params.nometabela[contControler]+"')"+"\n"
+					
+					File file2 = new File("C:\\walter\\controller${params.nometabela[contControler]}.groovy");					
+					def criarConrtoller = new FileWriter(new File("C:\\walter\\controller${params.nometabela[contControler]}.groovy"));	
+					criarConrtoller.write("package rest.api.docs\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${params.nometabela[contControler]}', description = '${params.nometabela[contControler]} Management  API')\nclass ${params.nometabela[contControler]}Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\nUserController(){\nsuper(User)\n}}");	
+					criarConrtoller.close();
+					contControler++
+				}
+				
+					File file3 = new File("C:\\walter\\UrlMappings.groovy");					
+					def criarUrlMaps = new FileWriter(new File("C:\\walter\\UrlMappings.groovy"));	
+					criarUrlMaps.write('package rest.api.docs\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{// apply constraints here}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
+					criarUrlMaps.close();
+			}else{
 			
-			    File file3 = new File("C:\\walter\\UrlMappings.groovy");					
-				def criarUrlMaps = new FileWriter(new File("C:\\walter\\UrlMappings.groovy"));	
-				criarUrlMaps.write('package rest.api.docs\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{// apply constraints here}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
-				criarUrlMaps.close();
-		
+				 //
+				//Criar file:
+				File file = new File("C:\\walter\\paulo.groovy");					
+				def criarapp = new FileWriter(new File("C:\\walter\\paulo.groovy"));	
+				criarapp.write("grails.plugin.reveng.includeTables = "+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")+"\n");
+				criarapp.write("grails.plugin.reveng.destDir = 'diretorioAplicacao/chico/grails-app/domain'");	
+				criarapp.close();
+				
+				//
+				//Criar Controller - dinamicamente
+					urlLista += '   "/'+list.toString().replace("[","").replace("]","")+'"'+"(resources:"+" '"+list.toString().replace("[","").replace("]","")+"')"+"\n"
+					
+					File file2 = new File("C:\\walter\\controller${list.toString().replace("[","").replace("]","")}.groovy");					
+					def criarConrtoller = new FileWriter(new File("C:\\walter\\controller${list.toString().replace("[","").replace("]","")}.groovy"));	
+					criarConrtoller.write("package rest.api.docs\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${list.toString().replace("[","").replace("]","")}', description = '${list.toString().replace("[","").replace("]","")} Management  API')\nclass ${list.toString().replace("[","").replace("]","")}Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\nUserController(){\nsuper(User)\n}}");	
+					criarConrtoller.close();
+				//Criar UrlMaps
+					File file3 = new File("C:\\walter\\UrlMappings.groovy");					
+					def criarUrlMaps = new FileWriter(new File("C:\\walter\\UrlMappings.groovy"));	
+					criarUrlMaps.write('package rest.api.docs\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{// apply constraints here}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
+					criarUrlMaps.close();
+			}
 
         }
 		
