@@ -1,0 +1,110 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.11.6"
+        classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
+		classpath "org.grails.plugins:db-reverse-engineer:4.0.0"
+    }
+}
+
+version "0.1"
+group "pixel.modeler"
+
+apply plugin:"eclipse"
+apply plugin:"idea"
+//apply plugin:"war"
+apply plugin:"org.grails.grails-web"
+apply plugin:"org.grails.grails-gsp"
+apply plugin:"asset-pipeline"
+
+
+repositories {
+    mavenLocal()
+    maven { url "https://repo.grails.org/grails/core" }
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.grails:grails-core"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    compile "org.grails:grails-dependencies"
+    compile "org.grails:grails-web-boot"
+    compile "org.grails.plugins:cache"
+    compile "org.grails.plugins:scaffolding"
+    compile "org.hibernate:hibernate-core:4.3.10.Final"
+    compile "org.hibernate:hibernate-ehcache:4.3.10.Final"
+    compile "org.hibernate:hibernate-entitymanager:4.3.10.Final"
+	compile 'org.grails.plugins:db-reverse-engineer:4.0.0'
+    console "org.grails:grails-console"
+    profile "org.grails.profiles:web"
+    runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.11.6"
+    runtime "com.h2database:h2"
+	runtime "org.apache.tomcat:tomcat-jdbc"
+	runtime "org.postgresql:postgresql:9.4.1212"
+    testCompile "org.grails:grails-plugin-testing"
+    testCompile "org.grails.plugins:geb"
+    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+}
+
+task gerar {
+    doLast {
+	    println "cmd /c cls".execute().text
+        println '**************************************************************************'
+		println '*                                                                        *'
+		println '*                                                                        *'
+		println '*                Framework Pixel - Gerador Api Rest - Modelo             *'
+		println '*                                                                        *'
+		println '*                                                                        *'
+		println '**************************************************************************'
+		println "------------------------- Gerando Modelo ---------------------------------"
+		//gradlew assemble -Dgrails.env=development
+		//println "cmd /c gradlew assemble -Dgrails.env=development".execute().text
+		//println "cmd /c gradlew dbReverseEngineer".execute().text
+		//gradlew -q gerar
+		//println 'cmd /c grails generate-controller "*"'.execute().text
+		//println "cmd /c gradlew bootrun".execute().text
+		//println "cmd /c gradlew "
+		println "cmd /c cls".execute().text	
+    }
+	
+	copy {
+	    from "modelo"
+        into "diretorioAplicacao/chico"
+		//delete "/grails-app/controllers"
+    }
+	
+	//task renameArtifacts (type: Copy) {
+	//    println "----------------- Dentro  --------------------------"
+	//	from ('diretorioAplicacao/chico/build/libs/')
+	//	include 'modelo-0.1.jar'
+	//	destinationDir file('pixel-modeler/paulo')
+	//	rename 'modelo-0.1.jar', 'project.jar'
+	//}
+	copy {
+        from "diretorioAplicacao/chico/build/libs/modelo-0.1.jar"
+        into "paulo"
+    }
+	//task deleteRemainingJarAfterRename(type: Delete) {
+    //    delete fileTree('build\milestone\deployment\tool\') {
+    //        include '**/tool.jar'
+    //    }
+    //}
+}
+
+bootRun {
+    jvmArgs('-Dspring.output.ansi.enabled=always')
+    addResources = true
+}
+
+
+assets {
+    minifyJs = true
+    minifyCss = true
+}

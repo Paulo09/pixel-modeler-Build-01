@@ -50,7 +50,7 @@
 	                            <tr class="prop">
 	                                <td valign="top" class="name"></td>
 	                                <td valign="top" class="value ${hasErrors(bean:gerararquivo,field:'base','errors')}">
-	                                    <g:select class="form-control" optionKey="id" from="${Base.list()}" name="base.id" value="${gerararquivo?.base?.id}" ></g:select> <a href="${createLinkTo(dir:'/base/create')}"></a>
+	                                    <g:select class="form-control" optionKey="id" from="${Base.list()}" name="base.id" value="${gerararquivo?.base?.id}" ></g:select>
 										<label for="base"><font size="3"><b>Data Base</b></font></label>
 	                                </td>
 	                            </tr>
@@ -60,7 +60,7 @@
 								<tr class="prop">
 	                                <td valign="top" class="name"></td>
 	                                <td valign="top" class="value ${hasErrors(bean:gerararquivo,field:'base','errors')}">
-	                                    <g:select class="form-control" from="${tabelas}" name="nometabela" multiple="true"></g:select><a href=""></a>
+	                                    <g:select class="form-control" from="${tabelas}" name="nometabela" multiple="true"></g:select>
 										<label for="base"><font size="3"><b>Base</b></font></label>
 	                                </td>
 	                            </tr>							

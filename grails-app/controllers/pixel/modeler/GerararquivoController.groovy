@@ -120,7 +120,9 @@ class GerararquivoController {
 			list.add(params.nometabela.toString().replace("[","['").replace("]","']").replace(" ","").replace(",","','"))
 			
 			
-			println "------------------- Novo App -----------------"+list			
+			def dbserver = System.properties.getProperty('dbserver')
+			println "--------------------------------- Valor DBSERVER --------------------"+dbserver
+			
 			  
 			
 			if(params.nometabela.toString().contains(']')){
@@ -178,6 +180,12 @@ class GerararquivoController {
         }
 		
 		try {
+		    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Issue: https://github.com/Paulo09/pixel-modeler-Build-01/issues/1			
+		    //Trecho código responsável por pegar informações: Data Base, Tabela, campos, constraints, relacionamento e etc...
+			//obs: Essa implementação será dinâmica, sendo cadastrada pelo usuário. 
+			//Responsável codificado em 10/07/2020 por @PauloCastro
+			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 			def conexao = Sql.newInstance("jdbc:postgresql://localhost:5432/$gerararquivo.base.nome","postgres", "root", "org.postgresql.Driver")
 			def selectBaseOrigem = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
 			def selectBases = "SELECT datname FROM pg_database WHERE datistemplate = 'f'"

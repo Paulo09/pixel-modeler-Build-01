@@ -50,6 +50,17 @@ dependencies {
     testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
 }
 
+task gerarApp << {
+ copy {
+        //Comando para gerar Aplicacao
+		//gradlew -PnomeApp="nomeApp" gerarApp
+		from "modelo"
+		into "diretorioAplicacao/${nomeApp}"
+		//delete "/grails-app/controllers"
+	}
+    println "------------------------------ Parametro --------------------------"+nomeApp
+}
+
 bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
     addResources = true
