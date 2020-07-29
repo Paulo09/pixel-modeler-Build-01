@@ -58,12 +58,19 @@ task gerarApp << {
 		into "diretorioAplicacao/${nomeApp}"
 		//delete "/grails-app/controllers"
 	}
-    println "------------------------------ Parametro --------------------------"+nomeApp
+    //println "------------------------------ Parametro --------------------------"+nomeApp
+}
+
+tasks.findAll { task ->
+    task.name  in ['run', 'bootRun']
+}.each { task ->
+    task.systemProperties System.properties
 }
 
 bootRun {
     jvmArgs('-Dspring.output.ansi.enabled=always')
     addResources = true
+	
 }
 
 

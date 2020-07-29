@@ -81,7 +81,7 @@ task gerar {
     }
 	
 	//task renameArtifacts (type: Copy) {
-	//    println "----------------- Dentro  --------------------------"
+	//  println "----------------- Dentro  --------------------------"
 	//	from ('diretorioAplicacao/chico/build/libs/')
 	//	include 'modelo-0.1.jar'
 	//	destinationDir file('pixel-modeler/paulo')
