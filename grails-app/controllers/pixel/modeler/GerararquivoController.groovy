@@ -136,7 +136,7 @@ class GerararquivoController {
 			     
 			    //
 				//Criar file:					
-				def criarapp = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\conf\\application.groovy"));	
+				def criarapp = new FileWriter(new File("${caminhoAbs}\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\conf\\application.groovy"));	
 				criarapp.write("grails.plugin.reveng.includeTables = "+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")+"\n");
 				criarapp.write("grails.plugin.reveng.destDir = 'diretorioAplicacao/${grailsApplication.config.getProperty('pixelApp.nomeApp')}/grails-app/domain'");	
 				criarapp.close();
@@ -147,12 +147,12 @@ class GerararquivoController {
 				params.nometabela.each{
 					urlLista += '   "/'+params.nometabela[contControler]+'"'+"(resources:"+" '"+params.nometabela[contControler]+"')"+"\n"
 					//File file2 = new File("${caminhoAbs}\\framework\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\controllers\\controller${params.nometabela[contControler]}.groovy");					
-					def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\controller${params.nometabela[contControler]}.groovy"));	
+					def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\controller${params.nometabela[contControler]}.groovy"));	
 					criarConrtoller.write("package rest.api.docs\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${params.nometabela[contControler]}', description = '${params.nometabela[contControler]} Management  API')\nclass ${params.nometabela[contControler]}Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\nUserController(){\nsuper(User)\n}}");	
 					criarConrtoller.close();
 					contControler++
 				}					
-					def criarUrlMaps = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\UrlMappings.groovy"));	
+					def criarUrlMaps = new FileWriter(new File("${caminhoAbs}\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\UrlMappings.groovy"));	
 					criarUrlMaps.write('package rest.api.docs\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{// apply constraints here}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
 					criarUrlMaps.close();
 					//println "cmd /c gradlew assemble -Dgrails.env=development".execute().text
@@ -168,7 +168,7 @@ class GerararquivoController {
 			
 				 //
 				//Criar file:				
-				def criarapp = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\conf\\application.groovy"));
+				def criarapp = new FileWriter(new File("${caminhoAbs}\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\conf\\application.groovy"));
 				criarapp.write("grails.plugin.reveng.includeTables = "+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")+"\n");
 				criarapp.write("grails.plugin.reveng.destDir = 'diretorioAplicacao/${grailsApplication.config.getProperty('pixelApp.nomeApp')}/grails-app/domain'");	
 				criarapp.close();
@@ -176,17 +176,24 @@ class GerararquivoController {
 				//
 				//Criar Controller - dinamicamente
 					urlLista += '   "/'+list.toString().replace("[","").replace("]","")+'"'+"(resources:"+" '"+list.toString().replace("[","").replace("]","")+"')"+"\n"				
-					def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\controller${list.toString().replace("[","").replace("]","")}.groovy"));	
+					def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\controller${list.toString().replace("[","").replace("]","")}.groovy"));	
 					criarConrtoller.write("package rest.api.docs\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${list.toString().replace("[","").replace("]","")}', description = '${list.toString().replace("[","").replace("]","")} Management  API')\nclass ${list.toString().replace("[","").replace("]","")}Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\nUserController(){\nsuper(User)\n}}");	
 					criarConrtoller.close();
 				//Criar UrlMaps					
-					def criarUrlMaps = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\UrlMappings.groovy"));	
+					def criarUrlMaps = new FileWriter(new File("${caminhoAbs}\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\UrlMappings.groovy"));	
 					criarUrlMaps.write('package rest.api.docs\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{// apply constraints here}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
 					criarUrlMaps.close();
 					//println "cmd /c gradlew assemble -Dgrails.env=development".execute().text	
 			}
 
         }
+		
+		if(request.method == "GET"){
+		    bases = ""
+			def listaDatabase = Sql.newInstance("jdbc:postgresql://localhost:5432/${grailsApplication.config.getProperty('pixelApp.nomeDB')}","postgres", "root", "org.postgresql.Driver")
+			def selectBases = "SELECT datname FROM pg_database WHERE datistemplate = 'f'"
+			bases = listaDatabase.rows(selectBases).datname			
+		}
 		
 		try {
 		    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -195,21 +202,17 @@ class GerararquivoController {
 			//obs: Essa implementação será dinâmica, sendo cadastrada pelo usuário. 
 			//Responsável codificado em 10/07/2020 por @PauloCastro
 			///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-			def conexao = Sql.newInstance("jdbc:postgresql://localhost:5432/$gerararquivo.base.nome","postgres", "root", "org.postgresql.Driver")
+			def conexao = Sql.newInstance("jdbc:postgresql://localhost:5432/$params.tbBases","postgres", "root", "org.postgresql.Driver")
 			def selectBaseOrigem = "SELECT table_name FROM information_schema.tables WHERE table_schema = 'public'"
 			def selectBases = "SELECT datname FROM pg_database WHERE datistemplate = 'f'"
 			bases = conexao.rows(selectBases).datname
 			tabelas = conexao.rows(selectBaseOrigem).table_name
-			def gerarClasse=""
-			dataBase = gerararquivo.base.nome		
-
-			println "------------------------------------------ Nome Base -------------------------------------------"+gerararquivo.base.nome
 				
 		}catch(Exception e){}	
 
-			
+		println "------------------------------------------ Nome Base -------------------------------------------"+dataBase	
 
-		render view:'selecionartabelas.gsp', model:[tabelas:tabelas,dataBase:dataBase,bases:bases]
+		render view:'selecionartabelas.gsp', model:[tabelas:tabelas,bases:bases]
 	
 	}
 	

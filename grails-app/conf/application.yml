@@ -17,6 +17,7 @@ pixelApp:
     url: jdbc-aplicacao
     login: login-aplicacao
     nomeApp: paulo2	
+    nomeDB: robo
 environments:
     development:
         dataSource:

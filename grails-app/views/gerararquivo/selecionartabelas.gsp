@@ -49,25 +49,27 @@
                     <table>
                         <tbody>
 						
-							<% if(!tabelas){ %>                        
-	                            <tr class="prop">
-	                                <td valign="top" class="name"></td>
-	                                <td valign="top" class="value ${hasErrors(bean:gerararquivo,field:'base','errors')}">
-	                                    <g:select class="form-control" optionKey="id" from="${Base.list()}" name="base.id" value="${gerararquivo?.base?.id}" ></g:select>
-										<!--<label for="base"><font size="3"><b>Data Base *</b></font></label>-->
-	                                </td>
-	                            </tr>
-							<% } %>
+														
+								<% if(!tbBases && !tabelas){ %>
+									<tr class="prop">
+										<td valign="top" class="name"></td>
+										<td valign="top" class="value ${hasErrors(bean:gerararquivo,field:'base','errors')}">
+											<g:select class="form-control" from="${bases}" name="tbBases"></g:select>
+											<!--<label for="base"><font size="3"><b>Data Base *</b></font></label>-->
+										</td>
+									</tr>
+							    <% } %>
 							
-							<% if(tabelas){ %>							
-								<tr class="prop">
-	                                <td valign="top" class="name"></td>
-	                                <td valign="top" class="value ${hasErrors(bean:gerararquivo,field:'base','errors')}">
-	                                    <g:select class="form-control" from="${tabelas}" name="nometabela" multiple="true"></g:select>
-										<!--<label for="base"><font size="3"><b>Base ${dataBase}</b></font></label>-->
-	                                </td>
-	                            </tr>							
-							<% } %>
+							
+								<% if(tabelas){ %>				
+									<tr class="prop">
+		                                <td valign="top" class="name"></td>
+		                                <td valign="top" class="value ${hasErrors(bean:gerararquivo,field:'base','errors')}">
+		                                    <g:select class="form-control" from="${tabelas}" name="nometabela" multiple="true"></g:select>
+											<!--<label for="base"><font size="3"><b>Base ${dataBase}</b></font></label>-->
+		                                </td>
+		                            </tr>							
+								<% } %>
 								
                         
                            <!--<tr class="prop">
