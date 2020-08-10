@@ -1,9 +1,9 @@
 package rest.api.docs
 import com.wordnik.swagger.annotations.Api
 import grails.rest.RestfulController
-@Api(value = 'base', description = 'base Management  API')
-class baseController extends RestfulController {
+@Api(value = 'base', description = 'Base Pixel  API')
+class BaseController extends RestfulController {
 static responseFormats = ['json', 'xml']
-UserController(){
-super(User)
+BaseController(){
+super(Base)
 }}

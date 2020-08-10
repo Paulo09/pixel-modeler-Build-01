@@ -129,12 +129,12 @@ class GerararquivoController {
 			println "cmd /c gradlew -PnomeApp=${grailsApplication.config.getProperty('pixelApp.nomeApp')} gerarApp".execute().text
 			
 			
-			//println "------------------ Camel Case -----------------"+camelCase("paulocastro")
+			//println "------------------ Camel Case -----------------"+camelCase(${params.nometabela[0]}.toString())
 			  
 			
 			if(params.nometabela.toString().contains(']')){
 			     
-			    //
+			    //@PauloCastro
 				//Criar file:					
 				def criarapp = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\conf\\application.groovy"));	
 				criarapp.write("grails.plugin.reveng.includeTables = "+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")+"\n");
@@ -143,15 +143,14 @@ class GerararquivoController {
 
 				def contControler=0
 				params.nometabela.each{
-					urlLista += '   "/'+params.nometabela[contControler]+'"'+"(resources:"+" '"+params.nometabela[contControler]+"')"+"\n"
-					//File file2 = new File("${caminhoAbs}\\framework\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\controllers\\controller${params.nometabela[contControler]}.groovy");					
-					def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\rest\\api\\docs\\controller${params.nometabela[contControler]}.groovy"));	
-					criarConrtoller.write("package ${grailsApplication.config.getProperty("pixelApp.pacote")}\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${params.nometabela[contControler]}', description = '${params.nometabela[contControler]} Management  API')\nclass ${params.nometabela[contControler]}Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\nUserController(){\nsuper(User)\n}}");	
-					criarConrtoller.close();
+					urlLista += '   "/'+params.nometabela[contControler]+'"'+"(resources:"+" '"+params.nometabela[contControler]+"')"+"\n"				
+					def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\rest\\api\\docs\\"+camelCase(params.nometabela[contControler])+"Controller.groovy"));	
+					criarConrtoller.write("package ${grailsApplication.config.getProperty("pixelApp.pacote")}\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${params.nometabela[contControler]}', description = '${camelCase(params.nometabela[contControler])} Pixel  API')\nclass "+camelCase(params.nometabela[contControler])+"Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\n"+camelCase(params.nometabela[contControler])+"Controller(){\nsuper("+camelCase(params.nometabela[contControler])+")\n}}");	
+					criarConrtoller.close();					
 					contControler++
 				}					
 					def criarUrlMaps = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\rest\\api\\docs\\UrlMappings.groovy"));	
-					criarUrlMaps.write('package ${grailsApplication.config.getProperty("pixelApp.pacote")}\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{// apply constraints here}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
+					criarUrlMaps.write('package '+grailsApplication.config.getProperty("pixelApp.pacote")+'\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
 					criarUrlMaps.close();
 					//println "cmd /c gradlew assemble -Dgrails.env=development".execute().text
 					
@@ -161,22 +160,22 @@ class GerararquivoController {
 					  
 					  
 			}else{			
-				 //
+				//@PauloCastro
 				//Criar file:				
 				def criarapp = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\conf\\application.groovy"));
 				criarapp.write("grails.plugin.reveng.includeTables = "+list.toString().replace("[","['").replace("]","']").replace("'']","").replace("[''","")+"\n");
 				criarapp.write("grails.plugin.reveng.destDir = 'diretorioAplicacao/${grailsApplication.config.getProperty('pixelApp.nomeApp')}/grails-app/domain'");	
 				criarapp.close();
 				
-				//
+				//@PauloCastro
 				//Criar Controller - dinamicamente
 				urlLista += '   "/'+list.toString().replace("[","").replace("]","")+'"'+"(resources:"+" '"+list.toString().replace("[","").replace("]","")+"')"+"\n"				
-				def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\rest\\api\\docs\\controller${list.toString().replace("[","").replace("]","")}.groovy"));	
+				def criarConrtoller = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\rest\\api\\docs\\${camelCase(list.toString().replace("[","").replace("]",""))}Controller.groovy"));	
 				criarConrtoller.write("package ${grailsApplication.config.getProperty('pixelApp.pacote')}\nimport com.wordnik.swagger.annotations.Api\nimport grails.rest.RestfulController\n@Api(value = '${list.toString().replace("[","").replace("]","")}', description = '${list.toString().replace("[","").replace("]","")} Management  API')\nclass ${list.toString().replace("[","").replace("]","")}Controller extends RestfulController {\nstatic responseFormats = ['json', 'xml']\nUserController(){\nsuper(User)\n}}");	
 				criarConrtoller.close();
 				//Criar UrlMaps					
 				def criarUrlMaps = new FileWriter(new File("${caminhoAbs}\\diretorioAplicacao\\${grailsApplication.config.getProperty('pixelApp.nomeApp')}\\grails-app\\controllers\\rest\\api\\docs\\UrlMappings.groovy"));	
-				criarUrlMaps.write('package ${grailsApplication.config.getProperty("pixelApp.pacote")}\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{// apply constraints here}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
+				criarUrlMaps.write('package '+grailsApplication.config.getProperty("pixelApp.pacote")+'\nclass UrlMappings {\n static mappings = {\n   "/$controller/$action?/$id?(.$format)?"{constraints{}}\n   "/"(controller: "application", action:"index")\n   "500"(view: "/application/serverError")\n   "404"(view: "/application/notFound")\n'+urlLista+' }\n}');
 				criarUrlMaps.close();
 				//println "cmd /c gradlew assemble -Dgrails.env=development".execute().text	
 			}
