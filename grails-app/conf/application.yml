@@ -16,7 +16,8 @@ dataSource:
 pixelApp:
     url: jdbc-aplicacao
     login: login-aplicacao
-    nomeApp: paulo2	
+    nomeApp: pauloTeste
+    pacote: rest.api.docs 
     nomeDB: robo
 environments:
     development:

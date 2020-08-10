@@ -1,0 +1,92 @@
+buildscript {
+    ext {
+        grailsVersion = project.grailsVersion
+    }
+    repositories {
+        mavenLocal()
+        maven { url "https://repo.grails.org/grails/core" }
+    }
+    dependencies {
+        classpath "org.grails:grails-gradle-plugin:$grailsVersion"
+        classpath "org.grails.plugins:hibernate4:5.0.0.RC3"
+        classpath "org.grails.plugins:views-gradle:1.0.0.RC4"
+		classpath "org.grails.plugins:db-reverse-engineer:4.0.0"
+    }
+}
+
+version "0.1"
+group "rest.api.docs"
+
+apply plugin:"eclipse"
+apply plugin:"idea"
+apply plugin:"org.grails.grails-web"
+apply plugin:"org.grails.plugins.views-json"
+
+ext {
+    grailsVersion = project.grailsVersion
+    gradleWrapperVersion = project.gradleWrapperVersion
+}
+
+repositories {
+    mavenLocal()
+    maven { url "https://repo.grails.org/grails/core" }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.grails:grails-bom:$grailsVersion"
+    }
+    applyMavenExclusions false
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-logging"
+    compile "org.springframework.boot:spring-boot-autoconfigure"
+    compile "org.grails:grails-core"
+    compile "org.springframework.boot:spring-boot-starter-actuator"
+    compile "org.springframework.boot:spring-boot-starter-tomcat"
+    compile "org.grails:grails-dependencies"
+    compile "org.grails:grails-web-boot"
+    compile "org.grails.plugins:cache"
+    compile "org.grails.plugins:hibernate4"
+    compile "org.hibernate:hibernate-ehcache"
+    compile "org.grails.plugins:views-json"
+	compile "org.hibernate:hibernate-core:4.3.10.Final"
+    compile "org.hibernate:hibernate-ehcache:4.3.10.Final"
+    compile "org.hibernate:hibernate-entitymanager:4.3.10.Final"
+	compile 'org.grails.plugins:db-reverse-engineer:4.0.0'
+    console "org.grails:grails-console"
+    compile "org.grails.plugins:swaggydoc-grails3:0.26.0"
+    profile "org.grails.profiles:rest-api:3.1.0.RC2"
+    runtime "com.h2database:h2"
+	runtime "org.apache.tomcat:tomcat-jdbc"
+	runtime "org.postgresql:postgresql:9.4.1212"
+    testCompile "org.grails:grails-plugin-testing"
+    testCompile "org.grails.plugins:geb"
+    testCompile "org.grails:grails-datastore-rest-client"
+    testRuntime "org.seleniumhq.selenium:selenium-htmlunit-driver:2.47.1"
+    testRuntime "net.sourceforge.htmlunit:htmlunit:2.18"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = gradleWrapperVersion
+}
+task gerar {
+    doLast {
+	    println "cmd /c cls".execute().text
+        println '**************************************************************************'
+		println '*                                                                        *'
+		println '*                                                                        *'
+		println '*                Framework Pixel - Gerador Api Rest - Modelo             *'
+		println '*                                                                        *'
+		println '*                                                                        *'
+		println '**************************************************************************'
+		println "------------------------- Gerando Modelo ---------------------------------"
+		//gradlew assemble -Dgrails.env=development
+		println "cmd /c gradlew assemble -Dgrails.env=development".execute().text
+		//gradlew -q gerar
+		//println 'cmd /c grails generate-controller "*"'.execute().text
+		//println "cmd /c gradlew bootrun".execute().text
+		println "cmd /c cls".execute().text	
+    }
+}

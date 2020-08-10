@@ -4,19 +4,13 @@
 
     <title>PixeL Framework Interoperabilidade</title>
 	
-	<link rel="shortcut icon" href="/assets/Key-P-32.png" type="image/x-icon" />
+	<link rel="stylesheet" href="https://drive.google.com/uc?export=view&id=1PgN1uvNVXacsG_nty0pz8ZMG5mbtvgbu">
 	
     <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'/>
 	
-	<link rel="stylesheet" href="/assets/screen-pixel.css?compile=false" />
-
     <link rel="stylesheet" href="/assets/reset.css?compile=false" />
-
-    <!--<link rel="stylesheet" href="screen-pixel.css?compile=false" />-->
 	
-	<!--<link rel="stylesheet" href="${createLinkTo(dir:'application',file:'screen-pixel.css')}"/>-->
-	
-	 
+	<link rel="stylesheet" href="/assets/reset.css?compile=false" />	 
 
 
     <script type="text/javascript" src="/assets/swagger-lib/shred.bundle.js?compile=false" ></script>
